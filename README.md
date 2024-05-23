@@ -48,10 +48,13 @@ The config.yaml file includes parameters and resource allocations for different 
         Create metadata files (metadata_deseq2.tsv and metadata_PCA.tsv) and place them in the metadata/ directory.
 
     2- Load Necessary Modules:
+    
 module load snakemake
 module load conda
+
     3- Run the Pipeline:
 Use the following command to execute the pipeline. Adjust memory and CPU settings based on your available resources.
+
 srun --mem=32000 snakemake --use-conda --cores 32
 # Metadata Files
 
