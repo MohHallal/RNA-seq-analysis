@@ -1,0 +1,124 @@
+# Instructions:
+# 1. Ensure all required FASTQ files (.fastq.gz) are present in the "data/" directory.
+# 2. If you plan to execute DESeq2 analysis, provide a metadata file named "metadata_deseq2.tsv" in the "metadata/" directory.
+# The metadata file must include each sample in a separate line along with its corresponding condition, with tab separation between the sample name and condition without column names.
+# Ensure that the names of the samples in the metadata file match the names of the read files in the data file without the .fastq.gz extension.
+# 3. If you plan to execute PCA on the quantification of reads for each contig, provide a metadata file named "metadata_PCA.tsv" in the "metadata/" directory. This file must have the exact same column 
+# names as expected by the pipeline (sample, individu, origine, and name), even if they do not correspond to your context. These columns are just used in the plotting, which means that you can put your 
+# own parameters that you want to visualize your samples according to in the PCA (with the precised names of columns). If you don't have specific parameters to provide, you can simply put NA on the 
+# columns you don't need.
+# 4. Metadata files must be tab-separated.
+# 5. The sample names in the metadata tables must match the names of the read files, but without the ".fastq.gz" extension.
+# 6. It is important to use the same order of samples in the metadata files and the samples names in the config.yaml file. 
+# 7. Before executing the pipeline, ensure that you have loaded the necessary modules:
+#    module load snakemake
+#    module load conda
+# 8. To execute the pipeline, you can use the following command: srun --mem=32000 snakemake --use-conda --cores 32
+# "--mem": This argument specifies the total memory (in MB) allocated to the pipeline (all the jobs together). You can adjust this value according to your memory requirements.
+# "--cores": This argument specifies the total number of CPU cores allocated to the pipeline (all the jobs together). You can adjust this value based on the available CPU resources and your 
+# processing needs.
+# Hint: If you think the computations will take a long time, use tmux. With tmux, you can close the terminal, and the computation will continue running.
+
+# Absolute path to the reference transcriptome file
+fasta_ref: /shared/projects/transcriptome_gorgones/gorpol/data/oases_fpkm_1.fa
+
+# List of sample names (without the ".fastq.gz" extension) located in the "data" directory in the current directory in fastq.gz format
+samples:
+  - ECC4-DC6_S2_merged_R1
+  - ECC1-DC1_S1_merged_R1
+  - ECC4-DR2_S3_merged_R1
+  - ECC5-DC6_S4_merged_R1
+  - ECC5-DR2-2_S5_merged_R1
+  - ECR1-DC1_S6_merged_R1
+  - ECR1-DR1_S7_merged_R1
+  - ECR2-DC1_S8_merged_R1
+  - ECR2-DR1-3_S9_merged_R1
+  - ECR5-DC2_S10_merged_R1
+  - ECR5-DR2-3_S11_merged_R1
+  - ECC1-DR1_S12_merged_R1
+
+# Resources for Kallisto
+
+kallisto_index_mem_gb: 8
+# Memory (GB) for Kallisto indexing
+kallisto_index_threads: 4
+# Number of threads for Kallisto indexing
+kallisto_quant_mem_gb: 8
+# Memory (GB) for Kallisto quantification
+kallisto_quant_threads: 16
+# Number of threads for Kallisto quantification
+
+# Kallisto parameters according to the manual (https://pachterlab.github.io/kallisto/manual)
+# Parameters -l and -s are mandatory for single-end reads; common values if unknown are -l 200 and -s 50
+l: 200
+# Estimated average fragment length for single-end reads
+s: 50
+# Estimated standard deviation of fragment length for single-end reads
+
+# Resources for PCA (Principal Component Analysis) of Kallisto quantification
+
+pca_kallisto_mem_gb: 2
+# Memory (GB) for PCA
+pca_kallisto_threads: 4
+# Number of threads for PCA
+
+# Resources for DESeq2 of Kallisto quantification
+
+deseq2_kallisto_mem_gb: 2
+# Memory (GB) for DESeq2
+deseq2_kallisto_threads: 4
+# Number of threads for DESeq2
+
+# Salmon parameters
+
+# Parameter k for indexing the transcriptome, default is 31
+k_salmon: 31
+# Parameter libtype for specifying library type (see https://salmon.readthedocs.io/en/latest/salmon.html#what-s-this-libtype for details)
+libtype_salmon: A
+# Library type for Salmon
+
+# Resources for Salmon
+
+salmon_index_mem_gb: 4
+# Memory (GB) for Salmon indexing
+salmon_index_threads: 32
+# Number of threads for Salmon indexing
+salmon_quant_mem_gb: 4
+# Memory (GB) for Salmon quantification
+salmon_quant_threads: 32
+# Number of threads for salmon quant
+
+# Resources for DESeq2 analysis of Salmon quantification results
+
+deseq2_salmon_mem_gb: 2
+# Memory (GB) for DESeq2
+deseq2_salmon_threads: 4
+# Number of threads for DESeq2
+
+# Resources for PCA analysis of Salmon quantification results
+
+pca_salmon_mem_gb: 2
+# Memory (GB) for PCA
+pca_salmon_threads: 4
+# Number of threads for PCA
+
+# RSEM indexing resources
+
+RSEM_index_mem_gb: 4
+# Memory (GB) for RSEM index
+RSEM_index_threads: 16
+# Number of threads for RSEM index
+
+# Resources for RSEM quantification
+
+rsem_quant_mem_gb: 16
+# Memory (GB) for RSEM quant
+rsem_quant_threads: 50
+# Number of threads for RSEM quant
+
+# Resources for discoSNP
+
+discosnp_mem_gb: 32
+# Memory (GB)
+discosnp_threads: 40
+# Number of threads
