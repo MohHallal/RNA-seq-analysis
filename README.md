@@ -1,71 +1,138 @@
-# RNA-Seq Analysis Pipeline for Single-End Reads
+# RNA-seq and Variant Calling Pipeline
 
-This README file provides detailed instructions for setting up and executing the RNA-Seq analysis pipeline, which is specifically designed for single-end reads. The pipeline integrates several bioinformatics tools including Kallisto, Salmon, RSEM, DESeq2, and discoSNP, and generates outputs such as quantification, PCA plots, and significant gene lists.
-# Important Notice
+This repository contains a comprehensive bioinformatics pipeline for RNA-seq data analysis and variant calling. The pipeline is implemented using Snakemake and includes steps for indexing, quantification, principal component analysis (PCA), differential expression analysis, and variant calling.
 
-This pipeline has been developed and tested on the IFB cluster. We cannot guarantee that it will work exactly the same way on other platforms due to differences in system configurations, software versions, and environment settings.
+## Table of Contents
 
-# Pipeline Overview
+- [Overview](#overview)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Pipeline Steps](#pipeline-steps)
+- [Contributing](#contributing)
+- [License](#license)
 
-The pipeline involves the following major steps:
+## Overview
 
-    Indexing the reference transcriptome.
-    Quantifying gene expression.
-    Performing PCA analysis on quantification results.
-    Performing differential expression analysis using DESeq2.
-    Identifying SNPs using discoSNP and filtering VCF files.
+The pipeline includes the following key steps:
 
-# Prerequisites
+1. **Indexing and Quantification:**
+   - Kallisto
+   - Salmon
+   - RSEM
 
-Ensure the following modules are available and load them before running the pipeline:
+2. **Principal Component Analysis (PCA):**
+   - Kallisto
+   - Salmon
+   - DiscoSNP++
 
-    Snakemake
-    Conda
-    Kallisto
-    Salmon
-    RSEM
-    Bowtie2
-    Samtools
-    discoSNP
-    R
+3. **Differential Expression Analysis:**
+   - Kallisto
+   - Salmon
 
-# Directory Structure
+4. **Variant Calling:**
+   - DiscoSNP++
 
-    data/: Directory containing the input FASTQ files (.fastq.gz).
-    metadata/: Directory containing metadata files for DESeq2 and PCA.
-    scripts/: Directory containing R scripts for PCA and DESeq2 analyses.
-    config.yaml: Configuration file with parameters and resources.
-    env.yaml: Conda environment file specifying the required packages.
-    Snakefile: Snakemake file defining the workflow.
+## Installation
+
+To run this pipeline, you need to have Conda installed. Follow the steps below to set up the environment:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/rna-seq-variant-calling-pipeline.git
+   cd rna-seq-variant-calling-pipeline
+   
+Create and activate the Conda environment: 
+
+conda env create -f env.yaml
+conda activate rna-seq-pipeline
 
 # Configuration
 
-The config.yaml file includes parameters and resource allocations for different tools. Ensure that the sample names in the metadata files match the names of the read files without the .fastq.gz extension.
-# Execution Instructions
+The pipeline requires a configuration file (config.yaml) to specify various parameters. Below is an example configuration:
 
-    1- Prepare Data and Metadata:
-        Place your FASTQ files in the data/ directory.
-        Create metadata files (metadata_deseq2.tsv and metadata_PCA.tsv) and place them in the metadata/ directory.
+fasta_ref: /path/to/reference.fasta
+samples:
+  - sample1
+  - sample2
+  - sample3
+kallisto_index_mem_gb: 16
+kallisto_index_threads: 4
+kallisto_quant_mem_gb: 8
+kallisto_quant_threads: 4
+l: 200
+s: 20
+pca_kallisto_mem_gb: 8
+pca_kallisto_threads: 4
+pca_salmon_mem_gb: 8
+pca_salmon_threads: 4
+deseq2_kallisto_mem_gb: 8
+deseq2_kallisto_threads: 4
+deseq2_salmon_mem_gb: 8
+deseq2_salmon_threads: 4
+k_salmon: 31
+libtype_salmon: A
+salmon_index_mem_gb: 16
+salmon_index_threads: 4
+salmon_quant_mem_gb: 8
+salmon_quant_threads: 4
+RSEM_index_mem_gb: 16
+RSEM_index_threads: 4
+rsem_quant_mem_gb: 8
+rsem_quant_threads: 4
+discosnp_mem_gb: 16
+discosnp_threads: 4
 
-    2- Load Necessary Modules:
-    
-module load snakemake
-module load conda
+# Usage
 
-    3- Run the Pipeline:
-Use the following command to execute the pipeline. Adjust memory and CPU settings based on your available resources.
+To run the pipeline, use the following command:
 
-srun --mem=32000 snakemake --use-conda --cores 32
-# Metadata Files
+snakemake --cores <number_of_cores>
 
-    metadata_deseq2.tsv: This file must include each sample in a separate line along with its corresponding condition, with tab separation between the sample name and condition, without column names.
-    metadata_PCA.tsv: This file must include columns (sample, individu, origine, and name) even if they do not correspond to your context.
+You can also specify additional options such as --use-conda to ensure that the Conda environment is used for each rule.
+Pipeline Steps
+Indexing and Quantification
 
-# Notes
+    Kallisto:
+        index_kallisto: Creates an index for Kallisto using a reference FASTA file.
+        count_kallisto_single: Quantifies RNA-seq data using Kallisto for single-end reads.
 
-    The pipeline is designed for single-end reads of RNA-Seq data.
-    Ensure that the sample names in the metadata tables match the names of the read files without the .fastq.gz extension.
-    It is important to use the same order of samples in the metadata files and the samples list in the config.yaml file.
-    The pipeline generates output directories and log files for each step, which are useful for tracking progress and troubleshooting.
+    Salmon:
+        index_salmon: Creates an index for Salmon using a reference FASTA file.
+        quant_salmon: Quantifies RNA-seq data using Salmon.
 
-By following the instructions in this README, you will be able to execute the RNA-Seq analysis pipeline and obtain quantification, PCA, differential expression results, and SNPs from your single-end RNA-Seq data.
+    RSEM:
+        RSEM_index: Prepares a reference for RSEM using Bowtie2.
+        RSEM_quant: Quantifies RNA-seq data using RSEM.
+
+# Principal Component Analysis (PCA)
+
+    Kallisto:
+        PCA_kallisto: Performs PCA on Kallisto quantification results and generates plots.
+
+    Salmon:
+        PCA_salmon: Performs PCA on Salmon quantification results and generates plots.
+
+    DiscoSNP++:
+        PCA_discosnp: Performs PCA on variant calling results from DiscoSNP++ and generates plots.
+# Differential Expression Analysis
+
+    Kallisto:
+        DESEq2_kallisto: Performs differential expression analysis using DESeq2 on Kallisto quantification results.
+
+    Salmon:
+        DESEq2_salmon: Performs differential expression analysis using DESeq2 on Salmon quantification results.
+
+# Variant Calling
+
+    DiscoSNP++:
+        pop_list_discosnp: Generates a list of sample files for DiscoSNP++.
+        discosnp: Runs DiscoSNP++ for variant calling.
+        filter_vcf: Filters the VCF file generated by DiscoSNP++.
+
+# Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+# License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
