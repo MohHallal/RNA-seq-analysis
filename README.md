@@ -1,10 +1,11 @@
 # RNA-Seq Analysis Pipeline for Single-End Reads
 
 This README file provides detailed instructions for setting up and executing the RNA-Seq analysis pipeline, which is specifically designed for single-end reads. The pipeline integrates several bioinformatics tools including Kallisto, Salmon, RSEM, DESeq2, and discoSNP, and generates outputs such as quantification, PCA plots, and significant gene lists.
-Pipeline Overview
 # Important Notice
 
 This pipeline has been developed and tested on the IFB cluster. We cannot guarantee that it will work exactly the same way on other platforms due to differences in system configurations, software versions, and environment settings.
+
+# Pipeline Overview
 
 The pipeline involves the following major steps:
 
