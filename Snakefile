@@ -152,7 +152,7 @@ rule RSEM_index:
         mem_gb=config["RSEM_index_mem_gb"]
     threads: config["RSEM_index_threads"]
     log:
-        "rsem/index/rsem_index.log"
+        "RSEM/index/rsem_index.log"
     shell:
         """
         module load rsem
@@ -173,7 +173,7 @@ rule RSEM_quant:
         mem_gb=config["rsem_quant_mem_gb"]
     threads: config["rsem_quant_threads"]
     log:
-        "rsem/quant/{sample}_quant/rsem_quant.log"
+        "RSEM/quant/{sample}_quant/rsem_quant.log"
     shell:
         """
         module load rsem
