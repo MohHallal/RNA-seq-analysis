@@ -1,11 +1,11 @@
 configfile: "config.yaml"
 rule all:
     input:
-#        "PCA_discosnp/PC1_PC2_discosnp.png",
-#       	"PCA_discosnp/PC3_PC4_discosnp.png"
-#        "discosnp/snp_filter_3.recode.vcf"
-#        "discosnp/discoRes_k_31_c_3_D_100_P_3_b_0_coherent.vcf"
-        expand("RSEM/quant/{sample}_quant/{sample}_quant",sample=config["samples"])
+        "PCA_discosnp/PC1_PC2_discosnp.png",
+       	"PCA_discosnp/PC3_PC4_discosnp.png"
+        "discosnp/snp_filter_3.recode.vcf"
+        "discosnp/discoRes_k_31_c_3_D_100_P_3_b_0_coherent.vcf"
+#        expand("RSEM/quant/{sample}_quant/{sample}_quant",sample=config["samples"])
 rule index_kallisto:
     input:
         config["fasta_ref"]
