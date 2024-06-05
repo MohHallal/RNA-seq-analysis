@@ -49,40 +49,8 @@ conda activate rna-seq-pipeline
 
 # Configuration
 
-The pipeline requires a configuration file (config.yaml) to specify various parameters. Below is an example configuration:
-
-fasta_ref: /path/to/reference.fasta
-samples:
-  - sample1  
-  - sample2  
-  - sample3  
-kallisto_index_mem_gb: 16  
-kallisto_index_threads: 4  
-kallisto_quant_mem_gb: 8  
-kallisto_quant_threads: 4  
-l: 200  
-s: 20  
-pca_kallisto_mem_gb: 8  
-pca_kallisto_threads: 4  
-pca_salmon_mem_gb: 8  
-pca_salmon_threads: 4  
-deseq2_kallisto_mem_gb: 8  
-deseq2_kallisto_threads: 4  
-deseq2_salmon_mem_gb: 8  
-deseq2_salmon_threads: 4  
-k_salmon: 31  
-libtype_salmon: A  
-salmon_index_mem_gb: 16  
-salmon_index_threads: 4  
-salmon_quant_mem_gb: 8  
-salmon_quant_threads: 4  
-RSEM_index_mem_gb: 16  
-RSEM_index_threads: 4  
-rsem_quant_mem_gb: 8  
-rsem_quant_threads: 4  
-discosnp_mem_gb: 16  
-discosnp_threads: 4  
-  
+The pipeline requires a configuration file (config.yaml) to specify various parameters. Default values are precised in the example configuration file.
+    
 # Usage
 
 To run the pipeline, use the following command:
