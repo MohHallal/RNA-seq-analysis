@@ -58,7 +58,7 @@ To run the pipeline, use the following command:
 snakemake --cores <number_of_cores>
 
 You can also specify additional options such as --use-conda to ensure that the Conda environment is used for each rule.
-Pipeline Steps
+## Pipeline Steps
 # Indexing and Quantification
 
     Kallisto:
