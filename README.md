@@ -59,7 +59,7 @@ snakemake --cores <number_of_cores>
 
 You can also specify additional options such as --use-conda to ensure that the Conda environment is used for each rule.
 Pipeline Steps
-Indexing and Quantification
+# Indexing and Quantification
 
     Kallisto:
         index_kallisto: Creates an index for Kallisto using a reference FASTA file.
